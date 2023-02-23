@@ -25,16 +25,11 @@ jobs:
             - 'common/**'
 
     # run only if 'backend' files were changed
-    - name: backend tests
-      if: steps.filter.outputs.backend == 'true'
+    - name: Deploy Server
+      if: steps.filter.outputs.backend == 'true' || steps.filter.outputs.common == 'true'
       run: echo "Server Files Changed"
 
     # run only if 'frontend' files were changed
-    - name: frontend tests
-      if: steps.filter.outputs.frontend == 'true'
+    - name: Deploy Client
+      if: steps.filter.outputs.frontend == 'true' || steps.filter.outputs.common == 'true'
       run: echo "Client Files Changed"
-
-    # run if 'backend' or 'frontend' files were changed
-    - name: e2e tests
-      if: steps.filter.outputs.backend == 'true' || steps.filter.outputs.frontend == 'true'
-      run: echo "Common Files Changed"
