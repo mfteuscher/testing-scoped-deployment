@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Continuous Deployment Test
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+
+jobs:
+  delpoy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          backend:
+            - 'client/**'
+          frontend:
+            - 'server/**'
+          common:
+            - 'common/**'
+
+    # run only if 'backend' files were changed
+    - name: backend tests
+      if: steps.filter.outputs.backend == 'true'
+      run: echo "Server Files Changed"
+
+    # run only if 'frontend' files were changed
+    - name: frontend tests
+      if: steps.filter.outputs.frontend == 'true'
+      run: echo "Client Files Changed"
+
+    # run if 'backend' or 'frontend' files were changed
+    - name: e2e tests
+      if: steps.filter.outputs.backend == 'true' || steps.filter.outputs.frontend == 'true'
+      run: echo "Common Files Changed"
