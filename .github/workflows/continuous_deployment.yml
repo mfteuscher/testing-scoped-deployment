@@ -18,9 +18,9 @@ jobs:
       with:
         filters: |
           backend:
-            - 'client/**'
-          frontend:
             - 'server/**'
+          frontend:
+            - 'client/**'
           common:
             - 'common/**'
 
